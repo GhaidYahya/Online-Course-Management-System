@@ -1,0 +1,104 @@
+create database DATABASEP100;
+use DATABASEP100;
+
+create table Teacher (
+Tid int,
+Age int,
+Tname varchar(30) NOT Null,
+Temail varchar(30)NOT Null,
+Tphone varchar(10)NOT Null, 
+Salary double NOT Null, 
+experience int NOT Null,
+major varchar(30) NOT Null,
+primary key(Tid)
+
+);
+select *from teacher;
+INSERT INTO Teacher (Tid,Tname,Age,Tphone,Temail,major,experience,Salary) VALUES (569, 'Ghaid Yahay' ,20,  '0599999','ghaidyhaya@gmail.com','computer science', 8,300 );
+
+create table Course( 
+ cid int ,
+ Cname varchar(20),
+ Tid int ,
+ foreign key (Tid) references Teacher(Tid) on delete cascade,
+primary key(cid));
+
+INSERT INTO Course (Cid, Cname,Tid)
+VALUES (10,'math',569);
+select *from Course;
+
+create table Student( 
+ Sid int ,
+ Sname varchar(20),
+ Semail varchar(30),
+ Sphone varchar(10),
+primary key(Sid) );
+
+select *from Student;
+
+INSERT INTO Student (Sid, Sname,Semail,Sphone)
+VALUES (1,'Alaa','Alaa@gmail.com','0566666999');   
+INSERT INTO Student (Sid, Sname,Semail,Sphone)
+VALUES (2,'aysar','aysar@gmail.com','0566666998'); 
+INSERT INTO Student (Sid, Sname,Semail,Sphone)
+VALUES (3,'nabila','nabila@gmail.com','0566666997'); 
+INSERT INTO Student (Sid, Sname,Semail,Sphone)
+VALUES (4,'ghaid','ghaid@gmail.com','0566666996');
+
+
+
+
+create table examm(
+exam_id  int,
+exam_name varchar(50),
+exam_date varchar(50),
+exam_time varchar(50),
+primary key(exam_id)
+);
+select *from course;
+INSERT INTO examm VALUES (100,'math','20/1/2023','10:00');
+INSERT INTO examm VALUES (101,'aribc','21/1/2023','10:00');
+
+create table Set_exam(
+exam_id  int,
+Sid int ,
+Cid int ,
+grade float,
+foreign key (Sid) references Student(Sid)on delete cascade,
+foreign key (Cid) references Course(Cid)on delete cascade,
+foreign key (exam_id) references examm(exam_id) on delete cascade,
+primary key(exam_id,Sid,Cid)
+);
+INSERT INTO Set_exam VALUES (100,1,10,99);
+INSERT INTO Set_exam VALUES (101,1,10,99);
+select *  from Set_exam;
+select * from set_exam ;
+
+create table learn(
+Sid int ,
+Cid int ,
+pay boolean ,
+foreign key (Sid) references Student(Sid)on delete cascade,
+foreign key (Cid) references Course(Cid)on delete cascade,
+primary key(Sid,Cid));
+
+select *from learn;
+INSERT INTO learn VALUES (1,10,true);
+
+select count(*) from student s , course c , learn l 
+where s.sid  = l.sid and c.cid = l.cid and c.cname ='DataBase';
+
+select * from set_exam m where m.sid=3;
+
+select sum(salary) from teacher;
+select tname,max(experience) from teacher group by tname;
+select count(*) from learn l where l.pay = 'false' ;
+
+select * from examm x where x.exam_date='20/1/2023';
+select count(*) from set_exam where exam_id=100 and cid =333;
+select * from student where sname = 'ahmad';
+
+select s.sname from student s , set_exam m where s.sid=m.sid and m.cid = 333 and m.exam_id =1000;
+
+select distinct s.sname,c.cname from student s , set_exam m ,course c where s.sid= m.sid and c.cid=333 and m.grade >70;
+select distinct s.sname,c.cname from student s , set_exam p ,course c where s.sid = m.sid and c.cid=m.cid and m.cid = 333 and p.grade > 55.0;
